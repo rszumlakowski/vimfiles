@@ -150,3 +150,5 @@ set grepprg=grep\ -nH\ $*
 " The following changes the default filetype back to 'tex':
 let g:tex_flavor='latex'
 
+" Set up Latex Suite to use Preview as the PDF viewing program
+let Tex_ViewRuleComplete_pdf = '/usr/bin/open -a Preview $*.pdf' 
