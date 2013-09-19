@@ -152,3 +152,7 @@ let g:tex_flavor='latex'
 
 " Set up Latex Suite to use Preview as the PDF viewing program
 let Tex_ViewRuleComplete_pdf = '/usr/bin/open -a Preview $*.pdf' 
+
+" Recognize groovy files
+au BufNewFile,BufRead *.groovy  setf groovy
+au BufNewFile,BufRead *.gradle  setf groovy
