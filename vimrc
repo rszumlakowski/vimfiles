@@ -1,13 +1,16 @@
 " Rob Szumlakowski's nifty .vimrc file
 "
 
-syntax on
+" Load plugins provided by the GO language kit
+set rtp+=$GOROOT/misc/vim
 
 " allow filetype plugins
 filetype plugin on
 
 " allow indent plugins
 filetype indent on
+
+syntax on
 
 " don't care about being compatible with vi
 set nocompatible
