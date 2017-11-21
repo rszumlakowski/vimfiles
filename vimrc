@@ -1,161 +1,198 @@
-" Rob Szumlakowski's nifty .vimrc file
+" Rob's custom vimrc file.
+" Based off of this blog post: https://blog.hellojs.org/configure-vim-from-scratch-efe5cbc1c563
+
+" Summary of custom key mappings:
 "
+" The leader key is , (comma)
+"
+" ,f or ^p   # fuzzy search by filename
+" ,fe        # open netrw file explorer
+" ,fm        # fuzzy search most-recently-used-files
+" gc<motion> # Comment/uncomment a line or range of lines.
+" ^- ^-      # Comment/uncomment a line or range of lines.
+" ^- p       # Comment/uncomment inner paragraph
+" ^- b       # Comment/uncomment as a block
 
-" Load plugins provided by the GO language kit
-set rtp+=$GOROOT/misc/vim
-
-" allow filetype plugins
-filetype plugin on
-
-" allow indent plugins
-filetype indent on
-
-syntax on
-
-" don't care about being compatible with vi
 set nocompatible
 
-" Robbie prefers the darker colours, but comments need to be brighter
-highlight Comment ctermfg=blue term=bold
+" no need filetype to load plugins
+filetype off
 
-" Number of spaces that a <Tab> in the file counts for.
-set tabstop=4
+" specify a directory for plugins
+"
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
 
-" Always set autoindenting on
-set autoindent
+" TODO - See if you can figure out how to load the plugins using
+"        vim8's own plug-in manager.
 
-" Number of spaces to use for each step of (auto)indent.
-set shiftwidth=4	
+"  you will load your plugin here
+"  make sure you use single quotes
+Plug 'tomtom/tcomment_vim' " Comments lines
+Plug 'ctrlpvim/ctrlp.vim'  " Fuzzy search
+Plug 'itchyny/lightline.vim' " Status line
+" I used to load various language pack
+" 'vim-perl/vim-perl', 'lambdatoast/elm.vim'...
+" polyglot load them among other => One to rule them all
+Plug 'sheerun/vim-polyglot' " Syntax highlighting
+Plug 'editorconfig/editorconfig-vim' " Load editor configuration files (.editorconfig)
+Plug 'vim-syntastic/syntastic' " Syntax checking plugin
+Plug 'godlygeek/tabular' " Helps align things
 
-" Set the position of the tags file
-"set tags=./tags,./../tags,./../../tags,./../../../tags,tags
-set tags=./tags
+" initialize plugin system
+call plug#end()
 
-" Don't wrap lines at the edge of the screen
-set nowrap
+" activate filetype detection now that plugins are loaded
+filetype plugin on
+
+" turn on syntax files
+syntax on
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                   SETTINGS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" make backspaces delete sensibly
+set backspace=indent,eol,start
+
+" to autosave buffer (useful when switching between buffer)
+set autowrite
+
+" configure the invisible chars
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
+" ignore case if search pattern is all lowercase,
+"    case-sensitive otherwise (both smartcase and ignorecase needed)
+set smartcase
+set ignorecase
+
+" to keep backup and swap files in my home dir
+set backupdir=~/.vim/tmp/                   " for the backup files
+set directory=~/.vim/tmp/                   " for the swap files
+
+"
+" Netrw
+
+" absolute width of netrw window
+let g:netrw_winsize = -28
+
+" tree-view
+let g:netrw_liststyle = 3
+
+" sort is affecting only: directories on the top, files below
+let g:netrw_sort_sequence = '[\/]$,*'
+
+" open file in a new tab
+let g:netrw_browse_split = 3
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Lightline
+
+"let g:lightline = { 'colorscheme': 'solarized', }               "vim-lightline
+set laststatus=2                                                "vim-lightline
+set noshowmode                                                  "vim-lightline
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Editorconfig
+
+" don't have vim compiled with python => use external editorconfig
+let g:EditorConfig_core_mode = 'external_command'               "editorconfig-vim
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Syntastic
+
+set statusline+=%#warningmsg#                                   "syntastic
+set statusline+=%{SyntasticStatuslineFlag()}                    "syntastic
+set statusline+=%*                                              "syntastic
+
+let g:syntastic_always_populate_loc_list = 1                    "syntastic
+let g:syntastic_auto_loc_list = 1                               "syntastic
+let g:syntastic_check_on_open = 1                               "syntastic
+let g:syntastic_check_on_wq = 0                                 "syntastic
+let g:syntastic_javascript_checkers = ['eslint']                "syntastic
+let g:syntastic_ruby_checkers = ['rubocop']                     "syntastic
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim-markdown-previw
+
+let vim_markdown_preview_toggle=3
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                   KEYS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" General
+
+let mapleader = ','
+
+" use jj to quickly escape to normal mode while typing <- AWESOME tip
+inoremap jj <ESC>
+
+" insert newline without entering insert mode
+map <CR> o<Esc>k
+
+" Make editing lots of files at once easier by mapping ctrl+j and k to jump
+" through windows quickly and make them big.  At the same time, decrease
+" the minimum window height since the filename is often all we really need to see.
+noremap <c-j> <c-w>j<c-w>_ 
+noremap <c-k> <c-w>k<c-w>_
+set winminheight=0
 
 " Turn on incremental searching
 set incsearch
 
-" Do ignore case during searches
-set noignorecase
-
-" The bottom window doesn't get a status line if it's the only window
-set laststatus=1
-
 " Show the matching bracket for the last ')'
 set showmatch
 
-" Allow backspacing over everything in insert mode
-set backspace=2
-
-" Always show the cursor position
-set ruler
-
-" Don't changes the sizes of existing windows when opening
-" or closing new ones
+" Don't changes the sizes of existing windows when opening or closing new ones
 set noequalalways
 
-"" Turn on the 'Man blahblah' command
-"source $VIMRUNTIME/ftplugin/man.vim
-
-" Map F1 F2 and F3 to page through open buffers
-noremap <F1> :bprevious!<CR>
-noremap <F2> :bnext!<CR>
-"noremap <F3> :brewind!<CR>
-
-" Map F4 to refresh the current tags file
-"noremap <F4> :!(cd %:p:h;ctags *.[chC];ctags *.cc)&
-
-" Let vim makes typing in multiline comments
-" easier
+" Let vim makes typing in multiline comments easier
 set formatoptions+=roc
 
 " Turn on highlighting of search results
 set hlsearch
 
-"make editting lots of files at once easier
-"by mapping ctrl+j and k to jump through windows
-"quickly and make them big.  at the same time, decrease
-"the minimum window height since the filename is
-"often all we really need to see...
-noremap <C-J> <C-W>j<C-W>_ 
-noremap <C-K> <C-W>k<C-W>_
-set winminheight=0
-
 " Pressing leader u creates an underline under the current line
 noremap <silent> <Leader>u Yp:s/./-/g<CR>:noh<CR>j
-noh
 
-" Press shift+up or shift+down to swap the current
-" line with the line above or below.
-function! MySwapUp() 
-  if ( line( '.' ) > 1 ) 
-    let cur_col = virtcol(".") 
-    if ( line( '.' ) == line( '$' ) ) 
-      normal ddP 
-    else 
-      normal ddkP 
-    endif 
-    execute "normal " . cur_col . "|" 
-  endif 
-endfunction 
+" Press <leader> v to open vimrc (this file, even!)
+noremap <silent> <leader>v :split ~/.vim/vimrc<CR>
 
-function! MySwapDown() 
-  if ( line( '.' ) < line( '$' ) ) 
-    let cur_col = virtcol(".") 
-    normal ddp 
-    execute "normal " . cur_col . "|" 
-  endif 
-endfunction 
-
-noremap <silent> <S-Up> :call MySwapUp()<CR> 
-noremap <silent> <S-Down> :call MySwapDown()<CR>
-
-" Press <leader> r to open vimrc (this file, even!)
-noremap <silent> <leader>r :split ~/.vimrc<CR>
-
-" Press <leader> R to source vimrc
-noremap <silent> <leader>R :source ~/.vimrc<CR>
-
-" save befores before 'make'ing
-set autowrite
-
-" save and source the current file
-map <Leader>S :w<CR>:execute "source ".expand("%:p")<CR>
-
-" Set up things to match on
-set matchpairs=(:),{:},[:],<:>
+" reloads .vimrc -- making all changes active
+noremap <silent> <Leader>r :source ~/.vim/vimrc<CR>:PlugInstall<CR>:bdelete<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " we don't want vim to treat numbers as in octal format
 " when using the ctrl-a and ctrl-x commands
 set nrformats=hex
 
-" set the OpenURL command to open the given URL in the default browser
-command! -bar -nargs=1 OpenURL :!open <args>
+" don't word wrap
+set nowrap
 
-"ruby
-autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
-autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Leader F prefix is for file related mappings (open, browse...)
 
-"improve autocomplete menu color
-highlight Pmenu ctermbg=238 gui=bold
+nnoremap <silent> <Leader>f :CtrlP<CR>                          "ctrlp.vim
+nnoremap <silent> <Leader>fm :CtrlPMRU<CR>                      "ctrlp.vim
 
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse Latex-Suite. Set your grep
-" program to always generate a file-name.
-set grepprg=grep\ -nH\ $*
+" don't need NerdTree, Netrw is enough for me
+nnoremap <silent> <Leader>fe :Lexplore <CR>
 
-" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
-" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
-" The following changes the default filetype back to 'tex':
-let g:tex_flavor='latex'
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Leader B prefix is for buffer related mappings
 
-" Set up Latex Suite to use Preview as the PDF viewing program
-let Tex_ViewRuleComplete_pdf = '/usr/bin/open -a Preview $*.pdf' 
+nnoremap <silent> <Leader>b  :CtrlPBuffer<CR>                   "ctrlp.vim
+nnoremap <silent> <Leader>bb :bn<CR>
+nnoremap <silent> <Leader>bd :bdelete<CR>
 
-" Recognize groovy files
-au BufNewFile,BufRead *.groovy  setf groovy
-au BufNewFile,BufRead *.gradle  setf groovy
+" (un)lock the current buffer to prevent modification
+nnoremap <silent> <Leader>bl :set nomodifiable<CR>
+nnoremap <silent> <Leader>bu :set modifiable<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Leader G prefix is for SCM (mainly git) related mappings
+
+
