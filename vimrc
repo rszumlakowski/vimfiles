@@ -36,8 +36,9 @@ Plug 'itchyny/lightline.vim' " Status line
 " polyglot load them among other => One to rule them all
 Plug 'sheerun/vim-polyglot' " Syntax highlighting
 Plug 'editorconfig/editorconfig-vim' " Load editor configuration files (.editorconfig)
-Plug 'vim-syntastic/syntastic' " Syntax checking plugin
 Plug 'godlygeek/tabular' " Helps align things
+Plug 'tpope/vim-dispatch' " Asynchronously dispatch commands to tmux
+Plug 'mileszs/ack.vim' " Wrapper for 'ack' search tool
 
 " initialize plugin system
 call plug#end()
@@ -99,20 +100,6 @@ set noshowmode                                                  "vim-lightline
 let g:EditorConfig_core_mode = 'external_command'               "editorconfig-vim
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Syntastic
-
-set statusline+=%#warningmsg#                                   "syntastic
-set statusline+=%{SyntasticStatuslineFlag()}                    "syntastic
-set statusline+=%*                                              "syntastic
-
-let g:syntastic_always_populate_loc_list = 1                    "syntastic
-let g:syntastic_auto_loc_list = 1                               "syntastic
-let g:syntastic_check_on_open = 1                               "syntastic
-let g:syntastic_check_on_wq = 0                                 "syntastic
-let g:syntastic_javascript_checkers = ['eslint']                "syntastic
-let g:syntastic_ruby_checkers = ['rubocop']                     "syntastic
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim-markdown-previw
 
 let vim_markdown_preview_toggle=3
@@ -162,7 +149,7 @@ noremap <silent> <Leader>u Yp:s/./-/g<CR>:noh<CR>j
 noremap <silent> <leader>v :split ~/.vim/vimrc<CR>
 
 " reloads .vimrc -- making all changes active
-noremap <silent> <Leader>r :source ~/.vim/vimrc<CR>:PlugInstall<CR>:bdelete<CR>:exe ":echo 'vimrc reloaded'"<CR>
+noremap <silent> <Leader>r :source ~/.vim/vimrc<CR>:PlugInstall<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " we don't want vim to treat numbers as in octal format
 " when using the ctrl-a and ctrl-x commands
