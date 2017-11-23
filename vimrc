@@ -26,7 +26,10 @@ call plug#begin('~/.vim/plugged')
 " TODO - See if you can figure out how to load the plugins using
 "        vim8's own plug-in manager.
 
-"  you will load your plugin here
+" Add a list of plugins to load using the 'Plugged' plugin manager.
+" Reload .vimrc and run the 'PlugInstall' command to install plugins.
+" Don't commit plugins to vimrc - they are their own git submodules.
+
 "  make sure you use single quotes
 Plug 'tomtom/tcomment_vim' " Comments lines
 Plug 'ctrlpvim/ctrlp.vim'  " Fuzzy search
@@ -39,6 +42,7 @@ Plug 'editorconfig/editorconfig-vim' " Load editor configuration files (.editorc
 Plug 'godlygeek/tabular' " Helps align things
 Plug 'tpope/vim-dispatch' " Asynchronously dispatch commands to tmux
 Plug 'mileszs/ack.vim' " Wrapper for 'ack' search tool
+Plug 'danchoi/ri.vim' " Plugin helps browse ruby documentation
 
 " initialize plugin system
 call plug#end()
@@ -177,9 +181,3 @@ nnoremap <silent> <Leader>bd :bdelete<CR>
 " (un)lock the current buffer to prevent modification
 nnoremap <silent> <Leader>bl :set nomodifiable<CR>
 nnoremap <silent> <Leader>bu :set modifiable<CR>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Leader G prefix is for SCM (mainly git) related mappings
-
-
