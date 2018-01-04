@@ -43,6 +43,8 @@ Plug 'godlygeek/tabular' " Helps align things
 Plug 'tpope/vim-dispatch' " Asynchronously dispatch commands to tmux
 Plug 'mileszs/ack.vim' " Wrapper for 'ack' search tool
 Plug 'danchoi/ri.vim' " Plugin helps browse ruby documentation
+Plug 'w0rp/ale' " Asynchronous lint engine
+Plug 'jsfaint/gen_tags.vim' " Asynchronous tags engine
 
 " initialize plugin system
 call plug#end()
@@ -153,7 +155,7 @@ noremap <silent> <Leader>u Yp:s/./-/g<CR>:noh<CR>j
 noremap <silent> <leader>v :split ~/.vim/vimrc<CR>
 
 " reloads .vimrc -- making all changes active
-noremap <silent> <Leader>r :source ~/.vim/vimrc<CR>:PlugInstall<CR>:exe ":echo 'vimrc reloaded'"<CR>
+noremap <silent> <Leader>V :source ~/.vim/vimrc<CR>:PlugInstall<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " we don't want vim to treat numbers as in octal format
 " when using the ctrl-a and ctrl-x commands
