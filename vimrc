@@ -43,8 +43,7 @@ Plug 'godlygeek/tabular' " Helps align things
 Plug 'tpope/vim-dispatch' " Asynchronously dispatch commands to tmux
 Plug 'mileszs/ack.vim' " Wrapper for 'ack' search tool
 Plug 'danchoi/ri.vim' " Plugin helps browse ruby documentation
-Plug 'w0rp/ale' " Asynchronous lint engine
-Plug 'jsfaint/gen_tags.vim' " Asynchronous tags engine
+Plug 'lifepillar/vim-solarized8' " Colour scheme
 
 " initialize plugin system
 call plug#end()
@@ -58,6 +57,9 @@ syntax on
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                   SETTINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Colour scheme
+colorscheme solarized8
 
 " make backspaces delete sensibly
 set backspace=indent,eol,start
@@ -95,7 +97,7 @@ let g:netrw_browse_split = 3
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Lightline
 
-"let g:lightline = { 'colorscheme': 'solarized', }               "vim-lightline
+let g:lightline = { 'colorscheme': 'solarized', }               "vim-lightline
 set laststatus=2                                                "vim-lightline
 set noshowmode                                                  "vim-lightline
 
@@ -117,6 +119,11 @@ let vim_markdown_preview_toggle=3
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " General
+
+set shiftwidth=2
+set softtabstop=2
+set tabstop=8
+set noexpandtab
 
 let mapleader = ','
 
