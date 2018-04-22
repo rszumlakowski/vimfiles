@@ -34,16 +34,13 @@ call plug#begin('~/.vim/plugged')
 Plug 'tomtom/tcomment_vim' " Comments lines
 Plug 'ctrlpvim/ctrlp.vim'  " Fuzzy search
 Plug 'itchyny/lightline.vim' " Status line
-" I used to load various language pack
-" 'vim-perl/vim-perl', 'lambdatoast/elm.vim'...
-" polyglot load them among other => One to rule them all
-Plug 'sheerun/vim-polyglot' " Syntax highlighting
+Plug 'sheerun/vim-polyglot' " Syntax highlighting for many file formats
 Plug 'editorconfig/editorconfig-vim' " Load editor configuration files (.editorconfig)
 Plug 'godlygeek/tabular' " Helps align things
 Plug 'tpope/vim-dispatch' " Asynchronously dispatch commands to tmux
 Plug 'mileszs/ack.vim' " Wrapper for 'ack' search tool
 Plug 'danchoi/ri.vim' " Plugin helps browse ruby documentation
-Plug 'lifepillar/vim-solarized8' " Colour scheme
+Plug 'chriskempson/base16-vim' " Colour scheme
 
 " initialize plugin system
 call plug#end()
@@ -59,7 +56,7 @@ syntax on
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Colour scheme
-colorscheme solarized8
+colorscheme base16-default-dark
 
 " make backspaces delete sensibly
 set backspace=indent,eol,start
@@ -97,9 +94,9 @@ let g:netrw_browse_split = 3
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Lightline
 
-let g:lightline = { 'colorscheme': 'solarized', }               "vim-lightline
-set laststatus=2                                                "vim-lightline
-set noshowmode                                                  "vim-lightline
+let g:lightline = { 'colorscheme': 'PaperColor' }               " vim-lightline
+set laststatus=2                                                " vim-lightline
+set noshowmode                                                  " vim-lightline
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editorconfig
