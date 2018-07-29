@@ -12,6 +12,9 @@
 " ^- ^-      # Comment/uncomment a line or range of lines.
 " ^- p       # Comment/uncomment inner paragraph
 " ^- b       # Comment/uncomment as a block
+" ^ n        # Toggle NERDTree visability
+" ,v         # Load vimrc in a split
+" ,V         # Source vimrc and load plugins
 
 set nocompatible
 
@@ -40,7 +43,9 @@ Plug 'godlygeek/tabular' " Helps align things
 Plug 'tpope/vim-dispatch' " Asynchronously dispatch commands to tmux
 Plug 'mileszs/ack.vim' " Wrapper for 'ack' search tool
 Plug 'danchoi/ri.vim' " Plugin helps browse ruby documentation
-Plug 'chriskempson/base16-vim' " Colour scheme
+Plug 'scrooloose/nerdtree' " File explorer
+Plug 'Xuyuanp/nerdtree-git-plugin' " Shows git status in NERDTree
+Plug 'airblade/vim-gitgutter' " Shows the git status in the gutter
 
 " initialize plugin system
 call plug#end()
@@ -55,8 +60,12 @@ syntax on
 "                   SETTINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Colour scheme
-colorscheme base16-default-dark
+" Load NERDTree at start up if no files are specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Control + N toggles NERDTree
+map <C-n> :NERDTreeToggle<CR>
 
 " make backspaces delete sensibly
 set backspace=indent,eol,start
