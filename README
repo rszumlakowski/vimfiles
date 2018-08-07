@@ -3,3 +3,6 @@ Rob Szumlakowski's vim settings.
 Uses the "plugged" plugin manager.  After cloning this repository into
 your ~/.vim directory load vim and run the ":PlugInstall" command to
 install all plugins.
+
+The `init.vim` file is a configuration file for Neovim.  Put this file
+in the `~/.config/nvim` directory.
