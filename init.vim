@@ -175,17 +175,19 @@ map <leader>. :GoAlternate<CR>
 let test#go#runner = 'ginkgo'
 
 " shortcuts for testing code (vim-test plugin)
-nmap <silent> <leader>t :TestNearest<CR>
-nmap <silent> <leader>T :TestFile<CR>
-nmap <silent> <leader>a :TestSuite<CR>
-nmap <silent> <leader>l :TestLast<CR>
-nmap <silent> <leader>g :TestVisit<CR>
+nmap <silent> <leader>t :w<CR>:TestNearest<CR>
+nmap <silent> <leader>T :w<CR>:TestFile<CR>
+nmap <silent> <leader>a :w<CR>:TestSuite<CR>
+nmap <silent> <leader>l :w<CR>:TestLast<CR>
+nmap <silent> <leader>g :w<CR>:TestVisit<CR>
 
 " disables folding throughout
 set nofoldenable
 
 " alternate to invoke ctrl-p
 map <Leader>f <C-p>
+
+map <C-l> :CtrlPMRU<CR>
 
 " removes unneeded folders to be searched in
 let g:ctrlp_custom_ignore = {
@@ -235,3 +237,6 @@ nnoremap <F9> :wa<CR>:Dispatch<CR>
 
 " Run rspec on the current file in Dispatch by pressing F10
 nnoremap <F10> :w<CR>:Dispatch rspec %<CR>
+"
+" use jj to quickly escape to normal mode while typing <- AWESOME tip
+inoremap jj <ESC>
