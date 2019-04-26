@@ -86,8 +86,7 @@ if filereadable(expand("~/.vimrc_background"))
 endif
 
 " configure the invisible chars
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
-set list
+set listchars=trail:.,extends:#,nbsp:.
 
 " Go Declaration
 au FileType go nmap gd <Plug>(go-def)
