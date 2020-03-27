@@ -7,11 +7,8 @@ Plug 'ctrlpvim/ctrlp.vim'
 " Git Commands
 Plug 'tpope/vim-fugitive'
 
-" Lets do go development
-Plug 'fatih/vim-go'
-
 " Neovim specific plugins
-Plug 'benekastah/neomake'
+Plug 'neomake/neomake'
 Plug 'Shougo/deoplete.nvim'
 
 " Quoting and parenthesizing made easy
@@ -28,9 +25,6 @@ Plug 'tpope/vim-vinegar'
 
 " the git gutter for changes
 Plug 'airblade/vim-gitgutter'
-
-" hcl syntax
-Plug 'fatih/vim-hclfmt'
 
 " colors
 Plug 'chriskempson/base16-vim'
@@ -49,6 +43,12 @@ Plug 'tpope/vim-dispatch'
 
 " Hooks up neovim supports to vim-dispatch
 Plug 'radenling/vim-dispatch-neovim'
+
+" Statusline plugin
+Plug 'bluz71/vim-moonfly-statusline'
+
+" Provides additional text objects
+Plug 'wellle/targets.vim'
 
 call plug#end()
 
@@ -205,7 +205,6 @@ set iskeyword+=-
 " shortcut to remove searched highlights
 :nnoremap <leader><space> :nohlsearch<cr>
 
-
 " Make editing lots of files at once easier by mapping ctrl+j and k to jump
 " through windows quickly and make them big.  At the same time, decrease
 " the minimum window height since the filename is often all we really need to see.
@@ -223,6 +222,9 @@ noremap <silent> <Leader>V :source ~/.config/nvim/init.vim<CR>:PlugInstall<CR>:e
 " when using the ctrl-a and ctrl-x commands
 set nrformats=hex
 
+" maximum line length for syntax highlighting (for performance reasons)
+set synmaxcol=300
+
 " Map Ctrl L to open the CtrlP window in MRU mode
 noremap <c-l> :CtrlPMRU<CR>
 
@@ -239,3 +241,13 @@ nnoremap <F10> :w<CR>:Dispatch rspec %<CR>
 "
 " use jj to quickly escape to normal mode while typing <- AWESOME tip
 inoremap jj <ESC>
+
+" Statusline settings for 'vim-moonfly-statusline'
+let g:moonflyHonerUserDefinedColors = 1
+highlight! link User1 StatusLine
+highlight! link User2 DiffAdd
+highlight! link User3 DiffChange
+highlight! link User4 DiffDelete
+highlight! link User5 StatusLine
+highlight! link User6 StatusLine
+highlight! link User7 StatusLine
