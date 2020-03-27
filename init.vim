@@ -9,7 +9,6 @@ Plug 'tpope/vim-fugitive'
 
 " Neovim specific plugins
 Plug 'neomake/neomake'
-Plug 'Shougo/deoplete.nvim'
 
 " Quoting and parenthesizing made easy
 Plug 'tpope/vim-surround'
@@ -119,37 +118,6 @@ let g:go_highlight_interfaces = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_metalinter_enabled = ['vet', 'errcheck']
-
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-
-" Take over Tab for deoplete
-" <Tab> completion:
-" 1. If popup menu is visible, select and insert next item
-" 2. Otherwise, if preceding chars are whitespace, insert tab char
-" 3. Otherwise, start manual autocomplete
-imap <silent><expr><Tab>
-  \ pumvisible() ? "\<C-n>"
-  \ : (<SID>is_whitespace() ? "\<Tab>"
-  \ : deoplete#mappings#manual_complete())
-
-smap <silent><expr><Tab>
-  \ pumvisible() ? "\<C-n>"
-  \ : (<SID>is_whitespace() ? "\<Tab>"
-  \ : deoplete#mappings#manual_complete())
-
-inoremap <expr><S-Tab>  pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:is_whitespace() "{{{
-  let col = col('.') - 1
-  return ! col || getline('.')[col - 1] =~? '\s'
-endfunction "}}}
-
-" Make deoplete insert a line when closing prompt
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function() abort
-  return deoplete#mappings#close_popup() . "\<CR>"
-endfunction
 
 " Git plugin mappings
 nnoremap <leader>gs :Gstatus<cr>
