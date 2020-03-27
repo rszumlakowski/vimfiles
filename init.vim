@@ -97,6 +97,10 @@ autocmd FileType yaml setlocal indentexpr=
 au BufRead,BufNewFile *.md setlocal textwidth=80
 au BufRead,BufNewFile *.markdown textwidth=80
 
+" FZF plugin mappings
+" FZF with the list of files managed by git
+noremap <c-p> :call fzf#run(fzf#wrap({'source': 'git ls-files', 'down': '50%'}))<cr>
+
 " Git plugin mappings
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gb :Gblame<cr>
