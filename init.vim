@@ -1,8 +1,8 @@
 " Plug for plugins
 call plug#begin('~/.vim/plugged')
 
-" File navigation
-Plug 'ctrlpvim/ctrlp.vim'
+" fzf (fuzzy find) integration
+Plug 'junegunn/fzf'
 
 " Git Commands
 Plug 'tpope/vim-fugitive'
@@ -122,16 +122,6 @@ nmap <silent> <leader>g :w<CR>:TestVisit<CR>
 " disables folding throughout
 set nofoldenable
 
-" alternate to invoke ctrl-p
-map <Leader>f <C-p>
-
-map <C-l> :CtrlPMRU<CR>
-
-" removes unneeded folders to be searched in
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.git|[\/]vendor$$',
-  \ }
-
 " no lint checking in YAML
 let g:neomake_yaml_enabled_makers = []
 
@@ -163,9 +153,6 @@ set nrformats=hex
 
 " maximum line length for syntax highlighting (for performance reasons)
 set synmaxcol=300
-
-" Map Ctrl L to open the CtrlP window in MRU mode
-noremap <c-l> :CtrlPMRU<CR>
 
 " Exit insert mode in the terminal window with Ctrl O
 if has('nvim')
