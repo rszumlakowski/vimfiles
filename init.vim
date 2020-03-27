@@ -87,21 +87,8 @@ endif
 " configure the invisible chars
 set listchars=trail:.,extends:#,nbsp:.
 
-" Go Declaration
-au FileType go nmap gd <Plug>(go-def)
-let g:go_fmt_command = "goimports"
-
 " Run neomake, it's like syntastic
 autocmd! BufWritePost * Neomake
-
-" Turn on go-implements
-au FileType go nmap <Leader>s <Plug>(go-implements)
-
-" Turn on go-rename
-au FileType go nmap <Leader>e <Plug>(go-rename)
-
-" switch between implementation and test files
-au FileType go nmap <Leader>a :vsp<CR>:GoAlternate<CR>
 
 " Make YAML Great Again
 autocmd FileType yaml setlocal indentexpr=
@@ -109,15 +96,6 @@ autocmd FileType yaml setlocal indentexpr=
 " Markdown textwidth
 au BufRead,BufNewFile *.md setlocal textwidth=80
 au BufRead,BufNewFile *.markdown textwidth=80
-
-" Amp up the syntax highlighting in vim-go
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_interfaces = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-let g:go_metalinter_enabled = ['vet', 'errcheck']
 
 " Git plugin mappings
 nnoremap <leader>gs :Gstatus<cr>
@@ -133,13 +111,6 @@ nnoremap <leader>gps :Git push origin head<cr>
 " neomake sucks at highlighting
 hi! link NeomakeWarningSign SignColumn
 hi! link NeomakeWarning NeomakeMessageDefault
-
-" this provides ability to flip between test and implementation
-" nice shortcut, if we hate it we can remove
-map <leader>. :GoAlternate<CR>
-
-" set ginkgo as test framework in golang
-let test#go#runner = 'ginkgo'
 
 " shortcuts for testing code (vim-test plugin)
 nmap <silent> <leader>t :w<CR>:TestNearest<CR>
@@ -176,7 +147,7 @@ set iskeyword+=-
 " Make editing lots of files at once easier by mapping ctrl+j and k to jump
 " through windows quickly and make them big.  At the same time, decrease
 " the minimum window height since the filename is often all we really need to see.
-noremap <c-j> <c-w>j<c-w>_ 
+noremap <c-j> <c-w>j<c-w>_
 noremap <c-k> <c-w>k<c-w>_
 set winminheight=0
 
