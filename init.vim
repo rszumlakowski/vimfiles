@@ -47,7 +47,8 @@ Plug 'tpope/vim-dispatch'
 Plug 'radenling/vim-dispatch-neovim'
 
 " Statusline plugin
-Plug 'bluz71/vim-moonfly-statusline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Provides additional text objects
 Plug 'wellle/targets.vim'
@@ -130,7 +131,7 @@ nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gg :Gbrowse<cr>
 nnoremap <leader>gl :Glog<cr>
 nnoremap <leader>gv :Gitv<cr>
-nnoremap <leader>gpl :Git pull --rebase<cr>
+nnoremap <leader>gpr :Git pull --rebase<cr>
 nnoremap <leader>gps :Git push origin head<cr>
 
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
@@ -151,8 +152,6 @@ set nofoldenable
 
 " no lint checking in YAML
 let g:neomake_yaml_enabled_makers = []
-
-let g:airline_theme='base16'
 
 nmap <silent> <leader>- :set iskeyword+=-<cr>
 nmap <silent> <leader>_ :set iskeyword-=-<cr>
@@ -195,15 +194,10 @@ nnoremap <F10> :w<CR>:Dispatch bundle exec rspec %<CR>
 " use jj to quickly escape to normal mode while typing <- AWESOME tip
 inoremap jj <ESC>
 
-" Statusline settings for 'vim-moonfly-statusline'
-let g:moonflyHonerUserDefinedColors = 1
-highlight! link User1 StatusLine
-highlight! link User2 DiffAdd
-highlight! link User3 DiffChange
-highlight! link User4 DiffDelete
-highlight! link User5 StatusLine
-highlight! link User6 StatusLine
-highlight! link User7 StatusLine
-
 " Set compiler to the bundle_exec_rspec compiler for Ruby files
 au BufRead,BufNewFile *.rb compiler bundle_exec_rspec
+
+" Airline statusbar settings
+let g:airline_theme='papercolor'
+let g:airline#extensions#tabline#formatter='unique_tail'
+let g:airline#extensions#tabline#enabled = 1
