@@ -167,7 +167,7 @@ end
 nnoremap <F9> :wa<CR>:Dispatch<CR>
 
 " Run rspec on the current file in Dispatch by pressing F10
-nnoremap <F10> :w<CR>:Dispatch rspec %<CR>
+nnoremap <F10> :w<CR>:Dispatch bundle exec rspec %<CR>
 "
 " use jj to quickly escape to normal mode while typing <- AWESOME tip
 inoremap jj <ESC>
@@ -181,3 +181,6 @@ highlight! link User4 DiffDelete
 highlight! link User5 StatusLine
 highlight! link User6 StatusLine
 highlight! link User7 StatusLine
+
+" Set compiler to the bundle_exec_rspec compiler for Ruby files
+au BufRead,BufNewFile *.rb compiler bundle_exec_rspec
