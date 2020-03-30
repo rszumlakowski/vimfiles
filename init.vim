@@ -4,6 +4,9 @@ call plug#begin('~/.vim/plugged')
 " fzf (fuzzy find) integration
 Plug 'junegunn/fzf'
 
+" ctrl-p file finder
+Plug 'kien/ctrlp.vim'
+
 " Git Commands
 Plug 'tpope/vim-fugitive'
 
@@ -99,7 +102,27 @@ au BufRead,BufNewFile *.markdown textwidth=80
 
 " FZF plugin mappings
 " FZF with the list of files managed by git
-noremap <c-p> :call fzf#run(fzf#wrap({'source': 'git ls-files', 'down': '50%'}))<cr>
+noremap <c-s> :call fzf#run(fzf#wrap({'source': 'git ls-files', 'down': '50%'}))<cr>
+
+" CtrlP mappings
+let g:ctrlp_max_files=20000
+nmap <leader>p :CtrlP<cr>
+
+" Easy bindings for its various modes
+nmap <leader>bb :CtrlPBuffer<cr>
+nmap <leader>bm :CtrlPMixed<cr>
+nmap <leader>bs :CtrlPMRU<cr>
+
+" Use the nearest .git directory as the cwd
+" This makes a lot of sense if you are working on a project that is in version
+" control. It also supports works with .svn, .hg, .bzr.
+let g:ctrlp_working_path_mode = 'r'
+
+" Setup some default ignores
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site|tmp|log|node_modules|bin|vendor)$',
+  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+\}
 
 " Git plugin mappings
 nnoremap <leader>gs :Gstatus<cr>
@@ -110,7 +133,7 @@ nnoremap <leader>gv :Gitv<cr>
 nnoremap <leader>gpl :Git pull --rebase<cr>
 nnoremap <leader>gps :Git push origin head<cr>
 
-:let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 " neomake sucks at highlighting
 hi! link NeomakeWarningSign SignColumn
