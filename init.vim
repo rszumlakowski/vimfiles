@@ -16,8 +16,8 @@ Plug 'neomake/neomake'
 " Quoting and parenthesizing made easy
 Plug 'tpope/vim-surround'
 
-" Searching with AG
-Plug 'rking/ag.vim'
+" Searching with ack
+Plug 'mileszs/ack.vim'
 
 " Make commenting easier
 Plug 'tpope/vim-commentary'
@@ -52,6 +52,12 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Provides additional text objects
 Plug 'wellle/targets.vim'
+
+" Rails plugin
+Plug 'tpope/vim-rails'
+
+" Bundler plugin
+Plug 'tpope/vim-bundler'
 
 call plug#end()
 
@@ -113,6 +119,7 @@ nmap <leader>p :CtrlP<cr>
 nmap <leader>bb :CtrlPBuffer<cr>
 nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>bs :CtrlPMRU<cr>
+nmap <leader>bt :CtrlPTag<cr>
 
 " Use the nearest .git directory as the cwd
 " This makes a lot of sense if you are working on a project that is in version
@@ -201,3 +208,6 @@ au BufRead,BufNewFile *.rb compiler bundle_exec_rspec
 let g:airline_theme='papercolor'
 let g:airline#extensions#tabline#formatter='unique_tail'
 let g:airline#extensions#tabline#enabled = 1
+
+" Search customization
+let g:ack_default_options = " --ignore-file=is:tags --ignore-file=ext:log --ignore-dir=.git --ignore-dir=.idea --ignore-dir=log --ignore-dir=vendor --ignore-dir=tmp -s --with-filename --nogroup --column"
