@@ -147,6 +147,9 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 hi! link NeomakeWarningSign SignColumn
 hi! link NeomakeWarning NeomakeMessageDefault
 
+" Tell Vim Test to use NeoMake and Dispatch
+let test#strategy='neomake'
+
 " shortcuts for testing code (vim-test plugin)
 nmap <silent> <leader>t :w<CR>:TestNearest<CR>
 nmap <silent> <leader>T :w<CR>:TestFile<CR>
