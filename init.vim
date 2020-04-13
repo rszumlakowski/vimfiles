@@ -132,6 +132,18 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
 \}
 
+" Causes the swapfile to be update more promptly, which enables GitGutter to
+" redraw sooner
+set updatetime=100
+
+" Gitgutter mappings
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+omap ih <Plug>(GitGutterTextObjectInnerPending)
+omap ah <Plug>(GitGutterTextObjectOuterPending)
+xmap ih <Plug>(GitGutterTextObjectInnerVisual)
+xmap ah <Plug>(GitGutterTextObjectOuterVisual)
+
 " Git plugin mappings
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gb :Gblame<cr>
