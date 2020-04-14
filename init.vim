@@ -59,6 +59,9 @@ Plug 'tpope/vim-rails'
 " Bundler plugin
 Plug 'tpope/vim-bundler'
 
+" Tagbar plugin
+Plug 'majutsushi/tagbar'
+
 call plug#end()
 
 " Syntax highlighting FTW
@@ -96,6 +99,9 @@ endif
 
 " configure the invisible chars
 set listchars=trail:.,extends:#,nbsp:.
+
+" F8 to show the Tagbar window
+nmap <F8> :TagbarToggle<CR>
 
 " Run neomake, it's like syntastic
 autocmd! BufWritePost * Neomake
