@@ -62,6 +62,9 @@ Plug 'tpope/vim-bundler'
 " Tagbar plugin
 Plug 'majutsushi/tagbar'
 
+" Match up plugin
+Plug 'andymass/vim-matchup'
+
 call plug#end()
 
 " Syntax highlighting FTW
