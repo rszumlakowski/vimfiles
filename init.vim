@@ -1,29 +1,44 @@
 " Plug for plugins
 call plug#begin('~/.vim/plugged')
 
-" fzf (fuzzy find) integration
-Plug 'junegunn/fzf'
-
-" ctrl-p file finder
-Plug 'kien/ctrlp.vim'
-
 " Git Commands
 Plug 'tpope/vim-fugitive'
 
-" Neovim specific plugins
-Plug 'neomake/neomake'
-
 " Quoting and parenthesizing made easy
 Plug 'tpope/vim-surround'
-
-" Searching with ack
-Plug 'mileszs/ack.vim'
 
 " Make commenting easier
 Plug 'tpope/vim-commentary'
 
 " make netrw way better
 Plug 'tpope/vim-vinegar'
+
+" Jump between errors
+Plug 'tpope/vim-unimpaired'
+
+" Vim Dispatch
+Plug 'tpope/vim-dispatch'
+
+" Rails plugin
+Plug 'tpope/vim-rails'
+
+" Bundler plugin
+Plug 'tpope/vim-bundler'
+
+" Repeat plugin
+Plug 'tpope/vim-repeat'
+
+" fzf (fuzzy find) integration
+Plug 'junegunn/fzf'
+
+" ctrl-p file finder
+Plug 'kien/ctrlp.vim'
+
+" Neovim specific plugins
+Plug 'neomake/neomake'
+
+" Searching with ack
+Plug 'mileszs/ack.vim'
 
 " the git gutter for changes
 Plug 'airblade/vim-gitgutter'
@@ -37,12 +52,6 @@ Plug 'janko-m/vim-test'
 " Allow yaml files to be folded
 Plug 'digitalrounin/vim-yaml-folds'
 
-" Jump between errors
-Plug 'tpope/vim-unimpaired'
-
-" Vim Dispatch
-Plug 'tpope/vim-dispatch'
-
 " Hooks up neovim supports to vim-dispatch
 Plug 'radenling/vim-dispatch-neovim'
 
@@ -52,12 +61,6 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Provides additional text objects
 Plug 'wellle/targets.vim'
-
-" Rails plugin
-Plug 'tpope/vim-rails'
-
-" Bundler plugin
-Plug 'tpope/vim-bundler'
 
 " Tagbar plugin
 Plug 'majutsushi/tagbar'
