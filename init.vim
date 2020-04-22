@@ -223,8 +223,6 @@ au BufRead,BufNewFile *.rb compiler bundle_exec_rspec
 
 " Airline statusbar settings
 let g:airline_theme='papercolor'
-let g:airline#extensions#tabline#formatter='unique_tail'
-let g:airline#extensions#tabline#enabled = 1
 
 " Search customization
 let g:ack_default_options = " --ignore-file=is:tags --ignore-file=ext:log --ignore-dir=.git --ignore-dir=.idea --ignore-dir=log --ignore-dir=vendor --ignore-dir=tmp -s --with-filename --nogroup --column"
