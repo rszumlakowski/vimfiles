@@ -43,6 +43,12 @@ Plug 'mileszs/ack.vim'
 " the git gutter for changes
 Plug 'airblade/vim-gitgutter'
 
+" Git log viewer
+Plug 'rbong/vim-flog'
+
+" Start screen
+Plug 'mhinz/vim-startify'
+
 " colors
 Plug 'chriskempson/base16-vim'
 
@@ -226,6 +232,16 @@ let g:airline_theme='papercolor'
 
 " Search customization
 let g:ack_default_options = " --ignore-file=is:tags --ignore-file=ext:log --ignore-dir=.git --ignore-dir=.idea --ignore-dir=log --ignore-dir=vendor --ignore-dir=tmp -s --with-filename --nogroup --column"
+
+" Startify plugin settings
+let g:startify_custom_header = [
+  \ '     d8b   db d88888b  .d88b.  db    db d888888b .88b  d88. ',
+  \ '     888o  88 88      .8P  Y8. 88    88   `88    88 YbdP`88 ',
+  \ '     88V8o 88 88ooooo 88    88 Y8    8P    88    88  88  88 ',
+  \ '     88 V8o88 88~~~~~ 88    88 `8b  d8     88    88  88  88 ',
+  \ '     88  V888 88.     `8b  d8   `8bd8     .88.   88  88  88 ',
+  \ '     VP   V8P Y88888P  `Y88P      YP    Y888888P YP  YP  YP ',
+  \ ]
 
 """" ----- vvv COC settings vvv -----
 
