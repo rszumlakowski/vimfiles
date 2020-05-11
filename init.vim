@@ -32,7 +32,7 @@ Plug 'tpope/vim-repeat'
 Plug 'junegunn/fzf'
 
 " ctrl-p file finder
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 
 " Neovim specific plugins
 Plug 'neomake/neomake'
@@ -77,6 +77,12 @@ Plug 'andymass/vim-matchup'
 " Code completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" Multiple cursors
+Plug 'terryma/vim-multiple-cursors'
+
+" Dev icons
+Plug 'ryanoasis/vim-devicons'
+
 call plug#end()
 
 " Syntax highlighting FTW
@@ -89,7 +95,6 @@ set background=dark
 
 " Set 256 colors
 set t_Co=256
-set guifont=Inconsolata:h16
 
 colorscheme base16-default-dark
 
@@ -224,8 +229,9 @@ nnoremap <F10> :w<CR>:Dispatch bundle exec rspec %<CR>
 " use jj to quickly escape to normal mode while typing <- AWESOME tip
 inoremap jj <ESC>
 
-" Set compiler to the bundle_exec_rspec compiler for Ruby files
-au BufRead,BufNewFile *.rb compiler bundle_exec_rspec
+" Compiler settings based on file types
+autocmd BufRead,BufNewFile *.rb compiler bundle_exec_rspec
+autocmd BufRead,BufNewFile *.rs compiler cargo
 
 " Airline statusbar settings
 let g:airline_theme='papercolor'
