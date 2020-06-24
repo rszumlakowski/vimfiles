@@ -83,6 +83,12 @@ Plug 'terryma/vim-multiple-cursors'
 " Dev icons
 Plug 'ryanoasis/vim-devicons'
 
+" Haskell plugin
+Plug 'neovimhaskell/haskell-vim'
+
+" Align text plugin
+Plug 'junegunn/vim-easy-align'
+
 call plug#end()
 
 " Syntax highlighting FTW
@@ -249,13 +255,38 @@ let g:startify_custom_header = [
   \ '     VP   V8P Y88888P  `Y88P      YP    Y888888P YP  YP  YP ',
   \ ]
 
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" Haskell settings
+let g:haskell_enable_quantification = 1
+let g:haskell_enable_recursivedo = 1
+let g:haskell_enable_arrowsyntax = 1
+let g:haskell_enable_pattern_synonyms = 1
+let g:haskell_enable_typeroles = 1
+let g:haskell_enable_static_pointers = 1
+"
+" Align 'then' two spaces after 'if'
+let g:haskell_indent_if = 0
+" Indent 'where' block two spaces under previous body
+let g:haskell_indent_before_where = 2
+" Allow a second case indent style (see haskell-vim README)
+let g:haskell_indent_case_alternative = 1
+" Only next under 'let' if there's an equals sign
+let g:haskell_indent_let_no_in = 0
+
+set suffixes+=.hi
+
 """" ----- vvv COC settings vvv -----
 
 " TextEdit might fail if hidden is not set.
 set hidden
 
 " Give more space for displaying messages.
-set cmdheight=2
+set cmdheight=1
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -309,9 +340,6 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
