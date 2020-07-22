@@ -89,6 +89,9 @@ Plug 'neovimhaskell/haskell-vim'
 " Align text plugin
 Plug 'junegunn/vim-easy-align'
 
+" TOML file format plugin
+Plug 'cespare/vim-toml'
+
 call plug#end()
 
 " Syntax highlighting FTW

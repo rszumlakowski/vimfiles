@@ -1,198 +1,418 @@
-" Rob's custom vimrc file.
-" Based off of this blog post: https://blog.hellojs.org/configure-vim-from-scratch-efe5cbc1c563
-
-" Summary of custom key mappings:
-"
-" The leader key is , (comma)
-"
-" ,f or ^p   # fuzzy search by filename
-" ,fe        # open netrw file explorer
-" ,fm        # fuzzy search most-recently-used-files
-" gc<motion> # Comment/uncomment a line or range of lines.
-" ^- ^-      # Comment/uncomment a line or range of lines.
-" ^- p       # Comment/uncomment inner paragraph
-" ^- b       # Comment/uncomment as a block
-" ^ n        # Toggle NERDTree visability
-" ,v         # Load vimrc in a split
-" ,V         # Source vimrc and load plugins
-
-set nocompatible
-
-" no need filetype to load plugins
-filetype off
-
-" specify a directory for plugins
-"
-" - Avoid using standard Vim directory names like 'plugin'
+" Plug for plugins
 call plug#begin('~/.vim/plugged')
 
-" TODO - See if you can figure out how to load the plugins using
-"        vim8's own plug-in manager.
+" Git Commands
+Plug 'tpope/vim-fugitive'
 
-" Add a list of plugins to load using the 'Plugged' plugin manager.
-" Reload .vimrc and run the 'PlugInstall' command to install plugins.
-" Don't commit plugins to vimrc - they are their own git submodules.
+" Quoting and parenthesizing made easy
+Plug 'tpope/vim-surround'
 
-"  make sure you use single quotes
-Plug 'tomtom/tcomment_vim' " Comments lines
-Plug 'ctrlpvim/ctrlp.vim'  " Fuzzy search
-Plug 'itchyny/lightline.vim' " Status line
-Plug 'sheerun/vim-polyglot' " Syntax highlighting for many file formats
-Plug 'editorconfig/editorconfig-vim' " Load editor configuration files (.editorconfig)
-Plug 'godlygeek/tabular' " Helps align things
-Plug 'tpope/vim-dispatch' " Asynchronously dispatch commands to tmux
-Plug 'mileszs/ack.vim' " Wrapper for 'ack' search tool
-Plug 'danchoi/ri.vim' " Plugin helps browse ruby documentation
-Plug 'scrooloose/nerdtree' " File explorer
-Plug 'Xuyuanp/nerdtree-git-plugin' " Shows git status in NERDTree
-Plug 'airblade/vim-gitgutter' " Shows the git status in the gutter
+" Make commenting easier
+Plug 'tpope/vim-commentary'
 
-" initialize plugin system
+" make netrw way better
+Plug 'tpope/vim-vinegar'
+
+" Jump between errors
+Plug 'tpope/vim-unimpaired'
+
+" Vim Dispatch
+Plug 'tpope/vim-dispatch'
+
+" Rails plugin
+Plug 'tpope/vim-rails'
+
+" Bundler plugin
+Plug 'tpope/vim-bundler'
+
+" Repeat plugin
+Plug 'tpope/vim-repeat'
+
+" fzf (fuzzy find) integration
+Plug 'junegunn/fzf'
+
+" ctrl-p file finder
+Plug 'ctrlpvim/ctrlp.vim'
+
+" Neovim specific plugins
+Plug 'neomake/neomake'
+
+" Searching with ack
+Plug 'mileszs/ack.vim'
+
+" the git gutter for changes
+Plug 'airblade/vim-gitgutter'
+
+" Git log viewer
+Plug 'rbong/vim-flog'
+
+" Start screen
+Plug 'mhinz/vim-startify'
+
+" colors
+Plug 'chriskempson/base16-vim'
+
+" run tests from within vim
+Plug 'janko-m/vim-test'
+
+" Allow yaml files to be folded
+Plug 'digitalrounin/vim-yaml-folds'
+
+" Hooks up neovim supports to vim-dispatch
+Plug 'radenling/vim-dispatch-neovim'
+
+" Statusline plugin
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" Provides additional text objects
+Plug 'wellle/targets.vim'
+
+" Tagbar plugin
+Plug 'majutsushi/tagbar'
+
+" Match up plugin
+Plug 'andymass/vim-matchup'
+
+" Code completion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Multiple cursors
+Plug 'terryma/vim-multiple-cursors'
+
+" Dev icons
+Plug 'ryanoasis/vim-devicons'
+
+" Haskell plugin
+Plug 'neovimhaskell/haskell-vim'
+
+" Align text plugin
+Plug 'junegunn/vim-easy-align'
+
+" TOML file format plugin
+Plug 'cespare/vim-toml'
+
 call plug#end()
 
-" activate filetype detection now that plugins are loaded
-filetype plugin on
-
-" turn on syntax files
+" Syntax highlighting FTW
 syntax on
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                   SETTINGS
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let base16colorspace=256
 
-" Load NERDTree at start up if no files are specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" Set background to dark for base16
+set background=dark
 
-" Control + N toggles NERDTree
-map <C-n> :NERDTreeToggle<CR>
+" Set 256 colors
+set t_Co=256
 
-" make backspaces delete sensibly
-set backspace=indent,eol,start
+colorscheme base16-default-dark
 
-" to autosave buffer (useful when switching between buffer)
-set autowrite
+" Move swp to a standard location
+set directory=/tmp
 
-" configure the invisible chars
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
+" Setting Spacing and Indent (plus line no)
+set number
+set tabstop=2 shiftwidth=2 expandtab
+set softtabstop=0
+set nowrap
 
-" ignore case if search pattern is all lowercase,
-"    case-sensitive otherwise (both smartcase and ignorecase needed)
-set smartcase
-set ignorecase
-
-" to keep backup and swap files in my home dir
-set backupdir=~/.vim/tmp/                   " for the backup files
-set directory=~/.vim/tmp/                   " for the swap files
-
-"
-" Netrw
-
-" absolute width of netrw window
-let g:netrw_winsize = -28
-
-" tree-view
-let g:netrw_liststyle = 3
-
-" sort is affecting only: directories on the top, files below
-let g:netrw_sort_sequence = '[\/]$,*'
-
-" open file in a new tab
-let g:netrw_browse_split = 3
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Lightline
-
-let g:lightline = { 'colorscheme': 'PaperColor' }               " vim-lightline
-set laststatus=2                                                " vim-lightline
-set noshowmode                                                  " vim-lightline
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Editorconfig
-
-" don't have vim compiled with python => use external editorconfig
-let g:EditorConfig_core_mode = 'external_command'               "editorconfig-vim
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim-markdown-previw
-
-let vim_markdown_preview_toggle=3
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                   KEYS
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" General
-
-set shiftwidth=2
-set softtabstop=2
-set tabstop=8
-set noexpandtab
-
+" Remap the leader key
 let mapleader = ','
 
-" use jj to quickly escape to normal mode while typing <- AWESOME tip
-inoremap jj <ESC>
+" configure the invisible chars
+set listchars=trail:.,extends:#,nbsp:.
 
-" insert newline without entering insert mode
-map <CR> o<Esc>k
+" F8 to show the Tagbar window
+nmap <F8> :TagbarToggle<CR>
+
+" Run neomake, it's like syntastic
+autocmd! BufWritePost * Neomake
+
+" Make YAML Great Again
+autocmd FileType yaml setlocal indentexpr=
+
+" Markdown textwidth
+au BufRead,BufNewFile *.md setlocal textwidth=80
+au BufRead,BufNewFile *.markdown textwidth=80
+
+" FZF plugin mappings
+" FZF with the list of files managed by git
+noremap <c-s> :call fzf#run(fzf#wrap({'source': 'git ls-files', 'down': '50%'}))<cr>
+
+" CtrlP settings
+let g:ctrlp_max_files=20000
+nmap <C-l> :CtrlPMRU<cr>
+
+" Use the nearest .git directory as the cwd
+" This makes a lot of sense if you are working on a project that is in version
+" control. It also supports works with .svn, .hg, .bzr.
+let g:ctrlp_working_path_mode = 'r'
+
+" Setup some default ignores
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site|tmp|log|node_modules|bin|vendor|target)$',
+  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+\}
+
+" Causes the swapfile to be update more promptly, which enables GitGutter to
+" redraw sooner
+set updatetime=100
+
+" Gitgutter mappings
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+omap ih <Plug>(GitGutterTextObjectInnerPending)
+omap ah <Plug>(GitGutterTextObjectOuterPending)
+xmap ih <Plug>(GitGutterTextObjectInnerVisual)
+xmap ah <Plug>(GitGutterTextObjectOuterVisual)
+
+" Git plugin mappings
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gg :Gbrowse<cr>
+nnoremap <leader>gl :Glog<cr>
+nnoremap <leader>gv :Gitv<cr>
+nnoremap <leader>gpr :Git pull --rebase<cr>
+nnoremap <leader>gps :Git push origin head<cr>
+
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+
+" neomake sucks at highlighting
+hi! link NeomakeWarningSign SignColumn
+hi! link NeomakeWarning NeomakeMessageDefault
+
+" Tell Vim Test to use NeoMake and Dispatch
+let test#strategy='neomake'
+
+" shortcuts for testing code (vim-test plugin)
+nmap <silent> <leader>t :w<CR>:TestNearest<CR>
+nmap <silent> <leader>T :w<CR>:TestFile<CR>
+nmap <silent> <leader>a :w<CR>:TestSuite<CR>
+nmap <silent> <leader>l :w<CR>:TestLast<CR>
+nmap <silent> <leader>g :w<CR>:TestVisit<CR>
+
+" disables folding throughout
+set nofoldenable
+
+" no lint checking in YAML
+let g:neomake_yaml_enabled_makers = []
+
+nmap <silent> <leader>- :set iskeyword+=-<cr>
+nmap <silent> <leader>_ :set iskeyword-=-<cr>
+set iskeyword+=-
+
+" shortcut to remove searched highlights
+:nnoremap <leader><space> :nohlsearch<cr>
 
 " Make editing lots of files at once easier by mapping ctrl+j and k to jump
 " through windows quickly and make them big.  At the same time, decrease
 " the minimum window height since the filename is often all we really need to see.
-noremap <c-j> <c-w>j<c-w>_ 
+noremap <c-j> <c-w>j<c-w>_
 noremap <c-k> <c-w>k<c-w>_
 set winminheight=0
 
-" Turn on incremental searching
-set incsearch
+" Press <leader> v to open neovim init.vim (this file, even!)
+noremap <silent> <leader>v :split ~/.config/nvim/init.vim<CR>
 
-" Show the matching bracket for the last ')'
-set showmatch
-
-" Don't changes the sizes of existing windows when opening or closing new ones
-set noequalalways
-
-" Let vim makes typing in multiline comments easier
-set formatoptions+=roc
-
-" Turn on highlighting of search results
-set hlsearch
-
-" Pressing leader u creates an underline under the current line
-noremap <silent> <Leader>u Yp:s/./-/g<CR>:noh<CR>j
-
-" Press <leader> v to open vimrc (this file, even!)
-noremap <silent> <leader>v :split ~/.vim/vimrc<CR>
-
-" reloads .vimrc -- making all changes active
-noremap <silent> <Leader>V :source ~/.vim/vimrc<CR>:PlugInstall<CR>:exe ":echo 'vimrc reloaded'"<CR>
+" reloads .neovim init.vim -- making all changes active
+noremap <silent> <Leader>V :source ~/.config/nvim/init.vim<CR>:PlugInstall<CR>:exe ":echo 'init.vim reloaded'"<CR>
 
 " we don't want vim to treat numbers as in octal format
 " when using the ctrl-a and ctrl-x commands
 set nrformats=hex
 
-" don't word wrap
-set nowrap
+" maximum line length for syntax highlighting (for performance reasons)
+set synmaxcol=300
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Leader F prefix is for file related mappings (open, browse...)
+" Exit insert mode in the terminal window with Ctrl O
+if has('nvim')
+  tmap <C-o> <C-\><C-n>
+end
 
-nnoremap <silent> <Leader>f :CtrlP<CR>                          "ctrlp.vim
-nnoremap <silent> <Leader>fm :CtrlPMRU<CR>                      "ctrlp.vim
+" Run Dispatch by pressing F9
+nnoremap <F9> :wa<CR>:Dispatch<CR>
 
-" don't need NerdTree, Netrw is enough for me
-nnoremap <silent> <Leader>fe :Lexplore <CR>
+" Run rspec on the current file in Dispatch by pressing F10
+nnoremap <F10> :w<CR>:Dispatch bundle exec rspec %<CR>
+"
+" use jj to quickly escape to normal mode while typing <- AWESOME tip
+inoremap jj <ESC>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Leader B prefix is for buffer related mappings
+" Compiler settings based on file types
+autocmd BufRead,BufNewFile *.rb compiler bundle_exec_rspec
+autocmd BufRead,BufNewFile *.rs compiler cargo
 
-nnoremap <silent> <Leader>b  :CtrlPBuffer<CR>                   "ctrlp.vim
-nnoremap <silent> <Leader>bb :bn<CR>
-nnoremap <silent> <Leader>bd :bdelete<CR>
+" Airline statusbar settings
+let g:airline_theme='papercolor'
 
-" (un)lock the current buffer to prevent modification
-nnoremap <silent> <Leader>bl :set nomodifiable<CR>
-nnoremap <silent> <Leader>bu :set modifiable<CR>
+" Search customization
+let g:ack_default_options = " --ignore-file=is:tags --ignore-file=ext:log --ignore-dir=.git --ignore-dir=.idea --ignore-dir=log --ignore-dir=vendor --ignore-dir=tmp -s --with-filename --nogroup --column"
+
+" Startify plugin settings
+let g:startify_custom_header = [
+  \ '     d8b   db d88888b  .d88b.  db    db d888888b .88b  d88. ',
+  \ '     888o  88 88      .8P  Y8. 88    88   `88    88 YbdP`88 ',
+  \ '     88V8o 88 88ooooo 88    88 Y8    8P    88    88  88  88 ',
+  \ '     88 V8o88 88~~~~~ 88    88 `8b  d8     88    88  88  88 ',
+  \ '     88  V888 88.     `8b  d8   `8bd8     .88.   88  88  88 ',
+  \ '     VP   V8P Y88888P  `Y88P      YP    Y888888P YP  YP  YP ',
+  \ ]
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" Haskell settings
+let g:haskell_enable_quantification = 1
+let g:haskell_enable_recursivedo = 1
+let g:haskell_enable_arrowsyntax = 1
+let g:haskell_enable_pattern_synonyms = 1
+let g:haskell_enable_typeroles = 1
+let g:haskell_enable_static_pointers = 1
+"
+" Align 'then' two spaces after 'if'
+let g:haskell_indent_if = 0
+" Indent 'where' block two spaces under previous body
+let g:haskell_indent_before_where = 2
+" Allow a second case indent style (see haskell-vim README)
+let g:haskell_indent_case_alternative = 1
+" Only next under 'let' if there's an equals sign
+let g:haskell_indent_let_no_in = 0
+
+set suffixes+=.hi
+
+"""" ----- vvv COC settings vvv -----
+
+" TextEdit might fail if hidden is not set.
+set hidden
+
+" Give more space for displaying messages.
+set cmdheight=1
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <F2> to trigger completion.
+inoremap <silent><expr> <F2> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Introduce function text object
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use <TAB> for selections ranges.
+" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+" coc-tsserver, coc-python are the examples of servers that support it.
+" nmap <silent> <TAB> <Plug>(coc-range-select)
+" xmap <silent> <TAB> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings using CoCList:
+" Show all diagnostics.
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+"""" ----- ^^^ COC settings ^^^ -----
+
