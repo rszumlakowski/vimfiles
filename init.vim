@@ -92,6 +92,15 @@ Plug 'junegunn/vim-easy-align'
 " TOML file format plugin
 Plug 'cespare/vim-toml'
 
+" vimtex plugin for tex
+Plug 'lervag/vimtex'
+
+" Rust plugin for vim
+Plug 'rust-lang/rust.vim'
+
+" Elixir plugin for vim
+Plug 'elixir-editors/vim-elixir'
+
 call plug#end()
 
 " Syntax highlighting FTW
