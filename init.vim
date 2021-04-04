@@ -19,12 +19,6 @@ Plug 'tpope/vim-unimpaired'
 " Vim Dispatch
 Plug 'tpope/vim-dispatch'
 
-" Rails plugin
-Plug 'tpope/vim-rails'
-
-" Bundler plugin
-Plug 'tpope/vim-bundler'
-
 " Repeat plugin
 Plug 'tpope/vim-repeat'
 
@@ -83,23 +77,14 @@ Plug 'terryma/vim-multiple-cursors'
 " Dev icons
 Plug 'ryanoasis/vim-devicons'
 
-" Haskell plugin
-Plug 'neovimhaskell/haskell-vim'
-
 " Align text plugin
 Plug 'junegunn/vim-easy-align'
 
 " TOML file format plugin
 Plug 'cespare/vim-toml'
 
-" vimtex plugin for tex
-Plug 'lervag/vimtex'
-
 " Rust plugin for vim
 Plug 'rust-lang/rust.vim'
-
-" Elixir plugin for vim
-Plug 'elixir-editors/vim-elixir'
 
 call plug#end()
 
@@ -241,12 +226,6 @@ end
 " Run Dispatch by pressing F9
 nnoremap <F9> :wa<CR>:Dispatch<CR>
 
-" Run rspec on the current file in Dispatch by pressing F10
-nnoremap <F10> :w<CR>:Dispatch bundle exec rspec %<CR>
-"
-" use jj to quickly escape to normal mode while typing <- AWESOME tip
-inoremap jj <ESC>
-
 " Compiler settings based on file types
 autocmd BufRead,BufNewFile *.rb compiler bundle_exec_rspec
 autocmd BufRead,BufNewFile *.rs compiler cargo
@@ -272,25 +251,6 @@ xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-
-" Haskell settings
-let g:haskell_enable_quantification = 1
-let g:haskell_enable_recursivedo = 1
-let g:haskell_enable_arrowsyntax = 1
-let g:haskell_enable_pattern_synonyms = 1
-let g:haskell_enable_typeroles = 1
-let g:haskell_enable_static_pointers = 1
-"
-" Align 'then' two spaces after 'if'
-let g:haskell_indent_if = 0
-" Indent 'where' block two spaces under previous body
-let g:haskell_indent_before_where = 2
-" Allow a second case indent style (see haskell-vim README)
-let g:haskell_indent_case_alternative = 1
-" Only next under 'let' if there's an equals sign
-let g:haskell_indent_let_no_in = 0
-
-set suffixes+=.hi
 
 """" ----- vvv COC settings vvv -----
 
