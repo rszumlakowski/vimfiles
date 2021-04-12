@@ -1,3 +1,5 @@
+" This configuration applies to both vim and neovim.
+
 " Plug for plugins
 call plug#begin('~/.vim/plugged')
 
@@ -19,12 +21,6 @@ Plug 'tpope/vim-unimpaired'
 " Vim Dispatch
 Plug 'tpope/vim-dispatch'
 
-" Rails plugin
-Plug 'tpope/vim-rails'
-
-" Bundler plugin
-Plug 'tpope/vim-bundler'
-
 " Repeat plugin
 Plug 'tpope/vim-repeat'
 
@@ -34,7 +30,8 @@ Plug 'junegunn/fzf'
 " ctrl-p file finder
 Plug 'ctrlpvim/ctrlp.vim'
 
-" Neovim specific plugins
+" Running programs asynchronously. Despite the
+" name, works with both vim and neovim.
 Plug 'neomake/neomake'
 
 " Searching with ack
@@ -59,7 +56,9 @@ Plug 'janko-m/vim-test'
 Plug 'digitalrounin/vim-yaml-folds'
 
 " Hooks up neovim supports to vim-dispatch
-Plug 'radenling/vim-dispatch-neovim'
+if has('nvim')
+  Plug 'radenling/vim-dispatch-neovim'
+end
 
 " Statusline plugin
 Plug 'vim-airline/vim-airline'
@@ -83,14 +82,14 @@ Plug 'terryma/vim-multiple-cursors'
 " Dev icons
 Plug 'ryanoasis/vim-devicons'
 
-" Haskell plugin
-Plug 'neovimhaskell/haskell-vim'
-
 " Align text plugin
 Plug 'junegunn/vim-easy-align'
 
 " TOML file format plugin
 Plug 'cespare/vim-toml'
+
+" Rust plugin for vim
+Plug 'rust-lang/rust.vim'
 
 call plug#end()
 
@@ -175,7 +174,9 @@ nnoremap <leader>gv :Gitv<cr>
 nnoremap <leader>gpr :Git pull --rebase<cr>
 nnoremap <leader>gps :Git push origin head<cr>
 
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+if has('nvim')
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+end
 
 " neomake sucks at highlighting
 hi! link NeomakeWarningSign SignColumn
@@ -249,39 +250,31 @@ let g:airline_theme='papercolor'
 let g:ack_default_options = " --ignore-file=is:tags --ignore-file=ext:log --ignore-dir=.git --ignore-dir=.idea --ignore-dir=log --ignore-dir=vendor --ignore-dir=tmp -s --with-filename --nogroup --column"
 
 " Startify plugin settings
-let g:startify_custom_header = [
-  \ '     d8b   db d88888b  .d88b.  db    db d888888b .88b  d88. ',
-  \ '     888o  88 88      .8P  Y8. 88    88   `88    88 YbdP`88 ',
-  \ '     88V8o 88 88ooooo 88    88 Y8    8P    88    88  88  88 ',
-  \ '     88 V8o88 88~~~~~ 88    88 `8b  d8     88    88  88  88 ',
-  \ '     88  V888 88.     `8b  d8   `8bd8     .88.   88  88  88 ',
-  \ '     VP   V8P Y88888P  `Y88P      YP    Y888888P YP  YP  YP ',
-  \ ]
+if has('nvim')
+  let g:startify_custom_header = [
+        \ '     d8b   db d88888b  .d88b.  db    db d888888b .88b  d88. ',
+        \ '     888o  88 88      .8P  Y8. 88    88   `88    88 YbdP`88 ',
+        \ '     88V8o 88 88ooooo 88    88 Y8    8P    88    88  88  88 ',
+        \ '     88 V8o88 88~~~~~ 88    88 `8b  d8     88    88  88  88 ',
+        \ '     88  V888 88.     `8b  d8   `8bd8     .88.   88  88  88 ',
+        \ '     VP   V8P Y88888P  `Y88P      YP    Y888888P YP  YP  YP ',
+        \ ]
+else
+  let g:startify_custom_header = [
+        \ '     db    db d888888b .88b  d88. ',
+        \ '     88    88   `88    88 YbdP`88 ',
+        \ '     Y8    8P    88    88  88  88 ',
+        \ '     `8b  d8     88    88  88  88 ',
+        \ '      `8bd8     .88.   88  88  88 ',
+        \ '        YP    Y888888P YP  YP  YP ',
+        \ ]
+end
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-
-" Haskell settings
-let g:haskell_enable_quantification = 1
-let g:haskell_enable_recursivedo = 1
-let g:haskell_enable_arrowsyntax = 1
-let g:haskell_enable_pattern_synonyms = 1
-let g:haskell_enable_typeroles = 1
-let g:haskell_enable_static_pointers = 1
-"
-" Align 'then' two spaces after 'if'
-let g:haskell_indent_if = 0
-" Indent 'where' block two spaces under previous body
-let g:haskell_indent_before_where = 2
-" Allow a second case indent style (see haskell-vim README)
-let g:haskell_indent_case_alternative = 1
-" Only next under 'let' if there's an equals sign
-let g:haskell_indent_let_no_in = 0
-
-set suffixes+=.hi
 
 """" ----- vvv COC settings vvv -----
 
