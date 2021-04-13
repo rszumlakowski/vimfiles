@@ -52,9 +52,6 @@ Plug 'chriskempson/base16-vim'
 " run tests from within vim
 Plug 'janko-m/vim-test'
 
-" Allow yaml files to be folded
-Plug 'digitalrounin/vim-yaml-folds'
-
 " Hooks up neovim supports to vim-dispatch
 if has('nvim')
   Plug 'radenling/vim-dispatch-neovim'
@@ -90,6 +87,19 @@ Plug 'cespare/vim-toml'
 
 " Rust plugin for vim
 Plug 'rust-lang/rust.vim'
+
+" Rego script plugin
+Plug 'tsandall/vim-rego'
+
+" Show vertical lines on indents (good for YAML)
+Plug 'Yggdroot/indentLine'
+
+" Modifies YAML folding rules
+Plug 'pedrohdz/vim-yaml-folds'
+
+" Alternate YAML plugin. Fixes the syntax highlighting in embedded documents
+" in YAML files.
+Plug 'stephpy/vim-yaml'
 
 call plug#end()
 
@@ -196,7 +206,7 @@ nmap <silent> <leader>g :w<CR>:TestVisit<CR>
 set nofoldenable
 
 " no lint checking in YAML
-let g:neomake_yaml_enabled_makers = []
+" let g:neomake_yaml_enabled_makers = []
 
 nmap <silent> <leader>- :set iskeyword+=-<cr>
 nmap <silent> <leader>_ :set iskeyword-=-<cr>
@@ -212,11 +222,11 @@ noremap <c-j> <c-w>j<c-w>_
 noremap <c-k> <c-w>k<c-w>_
 set winminheight=0
 
-" Press <leader> v to open neovim init.vim (this file, even!)
-noremap <silent> <leader>v :split ~/.config/nvim/init.vim<CR>
+" Press <leader> v to open vimrc
+noremap <silent> <leader>v :split ~/.vim/vimrc<CR>
 
-" reloads .neovim init.vim -- making all changes active
-noremap <silent> <Leader>V :source ~/.config/nvim/init.vim<CR>:PlugInstall<CR>:exe ":echo 'init.vim reloaded'"<CR>
+" reloads vimrc -- making all changes active
+noremap <silent> <Leader>V :source ~/.vim/vimrc<CR>:PlugInstall<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " we don't want vim to treat numbers as in octal format
 " when using the ctrl-a and ctrl-x commands
