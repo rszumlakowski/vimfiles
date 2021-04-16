@@ -30,10 +30,6 @@ Plug 'junegunn/fzf'
 " ctrl-p file finder
 Plug 'ctrlpvim/ctrlp.vim'
 
-" Running programs asynchronously. Despite the
-" name, works with both vim and neovim.
-Plug 'neomake/neomake'
-
 " Searching with ack
 Plug 'mileszs/ack.vim'
 
@@ -57,6 +53,14 @@ if has('nvim')
   Plug 'radenling/vim-dispatch-neovim'
 end
 
+" Completion plugin
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+end
+
+" Linting plugin
+Plug 'dense-analysis/ale'
+
 " Statusline plugin
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -69,9 +73,6 @@ Plug 'majutsushi/tagbar'
 
 " Match up plugin
 Plug 'andymass/vim-matchup'
-
-" Code completion
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Multiple cursors
 Plug 'terryma/vim-multiple-cursors'
@@ -100,6 +101,12 @@ Plug 'pedrohdz/vim-yaml-folds'
 " Alternate YAML plugin. Fixes the syntax highlighting in embedded documents
 " in YAML files.
 Plug 'stephpy/vim-yaml'
+
+" Golang programming
+Plug 'fatih/vim-go'
+
+" Makes splitting and joining lines of code easier
+Plug 'AndrewRadev/splitjoin.vim'
 
 call plug#end()
 
@@ -131,11 +138,8 @@ let mapleader = ','
 " configure the invisible chars
 set listchars=trail:.,extends:#,nbsp:.
 
-" F8 to show the Tagbar window
-nmap <F8> :TagbarToggle<CR>
-
-" Run neomake, it's like syntastic
-autocmd! BufWritePost * Neomake
+" F7 to show the Tagbar window
+nmap <F7> :TagbarToggle<CR>
 
 " Make YAML Great Again
 autocmd FileType yaml setlocal indentexpr=
@@ -188,13 +192,6 @@ if has('nvim')
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 end
 
-" neomake sucks at highlighting
-hi! link NeomakeWarningSign SignColumn
-hi! link NeomakeWarning NeomakeMessageDefault
-
-" Tell Vim Test to use NeoMake and Dispatch
-let test#strategy='neomake'
-
 " shortcuts for testing code (vim-test plugin)
 nmap <silent> <leader>t :w<CR>:TestNearest<CR>
 nmap <silent> <leader>T :w<CR>:TestFile<CR>
@@ -205,14 +202,11 @@ nmap <silent> <leader>g :w<CR>:TestVisit<CR>
 " disables folding throughout
 set nofoldenable
 
-" no lint checking in YAML
-" let g:neomake_yaml_enabled_makers = []
-
 nmap <silent> <leader>- :set iskeyword+=-<cr>
 nmap <silent> <leader>_ :set iskeyword-=-<cr>
 set iskeyword+=-
 
-" shortcut to remove searched highlights
+" shortcut to remove search highlights
 :nnoremap <leader><space> :nohlsearch<cr>
 
 " Make editing lots of files at once easier by mapping ctrl+j and k to jump
@@ -223,7 +217,7 @@ noremap <c-k> <c-w>k<c-w>_
 set winminheight=0
 
 " Press <leader> v to open vimrc
-noremap <silent> <leader>v :split ~/.vim/vimrc<CR>
+noremap <silent> <leader>v :vsplit ~/.vim/vimrc<CR>
 
 " reloads vimrc -- making all changes active
 noremap <silent> <Leader>V :source ~/.vim/vimrc<CR>:PlugInstall<CR>:exe ":echo 'vimrc reloaded'"<CR>
@@ -242,9 +236,6 @@ end
 
 " Run Dispatch by pressing F9
 nnoremap <F9> :wa<CR>:Dispatch<CR>
-
-" Run rspec on the current file in Dispatch by pressing F10
-nnoremap <F10> :w<CR>:Dispatch bundle exec rspec %<CR>
 "
 " use jj to quickly escape to normal mode while typing <- AWESOME tip
 inoremap jj <ESC>
@@ -252,6 +243,25 @@ inoremap jj <ESC>
 " Compiler settings based on file types
 autocmd BufRead,BufNewFile *.rb compiler bundle_exec_rspec
 autocmd BufRead,BufNewFile *.rs compiler cargo
+autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit') " vim-go plugin
+autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit') " vim-go plugin
+autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split') " vim-go plugin
+autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe') " vim-go plugin
+autocmd FileType go nmap <Leader>i <Plug>(go-info)
+
+" Shows Go function and variable info automatically when the cursor
+" is on top of one
+let g:go_auto_type_info = 1
+let g:go_auto_sameids = 1
+
+" Starts deoplete at startup
+if has('nvim')
+  let g:deoplete#enable_at_startup = 1
+  call deoplete#custom#option('omni_patterns', {
+        \ 'go': '[^. *\t]\.\w*',
+        \ '_': ['ale', 'foobar'],
+        \})
+end
 
 " Airline statusbar settings
 let g:airline_theme='papercolor'
@@ -285,137 +295,3 @@ xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-
-"""" ----- vvv COC settings vvv -----
-
-" TextEdit might fail if hidden is not set.
-set hidden
-
-" Give more space for displaying messages.
-set cmdheight=1
-
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-set signcolumn=yes
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <F2> to trigger completion.
-inoremap <silent><expr> <F2> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-" Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
-
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap keys for applying codeAction to the current line.
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Introduce function text object
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-
-" Use <TAB> for selections ranges.
-" NOTE: Requires 'textDocument/selectionRange' support from the language server.
-" coc-tsserver, coc-python are the examples of servers that support it.
-" nmap <silent> <TAB> <Plug>(coc-range-select)
-" xmap <silent> <TAB> <Plug>(coc-range-select)
-
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Mappings using CoCList:
-" Show all diagnostics.
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands.
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document.
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols.
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list.
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-
-"""" ----- ^^^ COC settings ^^^ -----
-
