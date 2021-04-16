@@ -58,9 +58,6 @@ if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 end
 
-" Linting plugin
-Plug 'dense-analysis/ale'
-
 " Statusline plugin
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -259,7 +256,6 @@ if has('nvim')
   let g:deoplete#enable_at_startup = 1
   call deoplete#custom#option('omni_patterns', {
         \ 'go': '[^. *\t]\.\w*',
-        \ '_': ['ale', 'foobar'],
         \})
 end
 
