@@ -295,3 +295,6 @@ nmap ga <Plug>(EasyAlign)
 
 " Mouse settings
 set mouse=nv
+
+" Disable indent line plugin for help and terminal files
+let g:indentLine_bufTypeExclude = ['help', 'terminal']
