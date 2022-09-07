@@ -30,8 +30,8 @@ Plug 'junegunn/fzf'
 " ctrl-p file finder
 Plug 'ctrlpvim/ctrlp.vim'
 
-" Searching with ack
-Plug 'mileszs/ack.vim'
+" Searching with ripgrep
+Plug 'jremmen/vim-ripgrep'
 
 " the git gutter for changes
 Plug 'airblade/vim-gitgutter'
@@ -63,7 +63,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " Provides additional text objects
-Plug 'wellle/targets.vim'
+Plug 'mg979/vim-visual-multi'
 
 " Tagbar plugin
 Plug 'majutsushi/tagbar'
@@ -128,6 +128,7 @@ set number
 set tabstop=2 shiftwidth=2 expandtab
 set softtabstop=0
 set nowrap
+set autowrite
 
 " Remap the leader key
 let mapleader = ','
@@ -135,8 +136,14 @@ let mapleader = ','
 " configure the invisible chars
 set listchars=trail:.,extends:#,nbsp:.
 
+" BufOnly command to close all buffers except the only one
+command! BufOnly execute '%bdelete|edit #|normal `"'
+
+" Strips escape sequences and ^M characters from file
+command! Strip execute '%s/\%x1b\[[0-9;]*m\|//g'
+
 " F7 to show the Tagbar window
-nmap <F7> :TagbarToggle<CR>
+nnoremap <F7> :TagbarToggle<CR>
 
 " Make YAML Great Again
 autocmd FileType yaml setlocal indentexpr=
@@ -145,13 +152,16 @@ autocmd FileType yaml setlocal indentexpr=
 au BufRead,BufNewFile *.md setlocal textwidth=80
 au BufRead,BufNewFile *.markdown textwidth=80
 
+nmap <C-G> :cnext<CR>
+
 " FZF plugin mappings
 " FZF with the list of files managed by git
 noremap <c-s> :call fzf#run(fzf#wrap({'source': 'git ls-files', 'down': '50%'}))<cr>
 
 " CtrlP settings
 let g:ctrlp_max_files=20000
-nmap <C-l> :CtrlPMRU<cr>
+nmap <C-L> :CtrlPMRU<CR>
+nmap <C-Q> :CtrlPTag<CR>
 
 " Use the nearest .git directory as the cwd
 " This makes a lot of sense if you are working on a project that is in version
@@ -163,6 +173,8 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site|tmp|log|node_modules|bin|vendor|target)$',
   \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
 \}
+
+let g:ctrlp_extensions = ['tag']
 
 " Causes the swapfile to be update more promptly, which enables GitGutter to
 " redraw sooner
@@ -189,18 +201,6 @@ if has('nvim')
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 end
 
-" shortcuts for testing code (vim-test plugin)
-nmap <silent> <leader>t :w<CR>:TestNearest<CR>
-nmap <silent> <leader>T :w<CR>:TestFile<CR>
-nmap <silent> <leader>a :w<CR>:TestSuite<CR>
-nmap <silent> <leader>l :w<CR>:TestLast<CR>
-nmap <silent> <leader>g :w<CR>:TestVisit<CR>
-
-" disables folding throughout
-set nofoldenable
-
-nmap <silent> <leader>- :set iskeyword+=-<cr>
-nmap <silent> <leader>_ :set iskeyword-=-<cr>
 set iskeyword+=-
 
 " shortcut to remove search highlights
@@ -233,9 +233,12 @@ end
 
 " Run Dispatch by pressing F9
 nnoremap <F9> :wa<CR>:Dispatch<CR>
-"
+
 " use jj to quickly escape to normal mode while typing <- AWESOME tip
 inoremap jj <ESC>
+
+" Spell language English (Canadian)
+set spelllang=en_ca
 
 " Compiler settings based on file types
 autocmd BufRead,BufNewFile *.rb compiler bundle_exec_rspec
@@ -244,7 +247,11 @@ autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit') "
 autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit') " vim-go plugin
 autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split') " vim-go plugin
 autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe') " vim-go plugin
-autocmd FileType go nmap <Leader>i <Plug>(go-info)
+autocmd Filetype go nnoremap <F3> :wa<CR>:GoDecls<CR>
+autocmd Filetype go nnoremap <F4> :wa<CR>:GoDeclsDir<CR>
+autocmd Filetype go nnoremap <F5> :wa<CR>:GoTest!<CR>
+autocmd Filetype go nnoremap <F6> :wa<CR>:GoTestFunc!<CR>
+autocmd BufWritePost *.go silent! !ctags -R --languages=go --exclude=log --exclude=tmp &
 
 " Shows Go function and variable info automatically when the cursor
 " is on top of one
@@ -262,9 +269,13 @@ end
 " Airline statusbar settings
 let g:airline_theme='papercolor'
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'default'
 
 " Search customization
-let g:ack_default_options = " --ignore-file=is:tags --ignore-file=ext:log --ignore-dir=.git --ignore-dir=.idea --ignore-dir=log --ignore-dir=vendor --ignore-dir=tmp -s --with-filename --nogroup --column"
+let g:rg_highlight="true"
 
 " Startify plugin settings
 if has('nvim')
@@ -295,3 +306,6 @@ nmap ga <Plug>(EasyAlign)
 
 " Mouse settings
 set mouse=nv
+
+set nofoldenable
+
