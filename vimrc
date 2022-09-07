@@ -309,3 +309,5 @@ set mouse=nv
 
 set nofoldenable
 
+" Disable indent line plugin for help and terminal files
+let g:indentLine_bufTypeExclude = ['help', 'terminal']
