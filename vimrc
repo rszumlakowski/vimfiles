@@ -24,6 +24,9 @@ Plug 'tpope/vim-dispatch'
 " Repeat plugin
 Plug 'tpope/vim-repeat'
 
+" software caps lock
+Plug 'tpope/vim-capslock'
+
 " fzf (fuzzy find) integration
 Plug 'junegunn/fzf'
 
@@ -125,10 +128,14 @@ set directory=/tmp
 
 " Setting Spacing and Indent (plus line no)
 set number
-set tabstop=2 shiftwidth=2 expandtab
-set softtabstop=0
+set softtabstop=2 tabstop=2 shiftwidth=2 expandtab
 set nowrap
 set autowrite
+set cursorline
+
+" Make it easier to open filenames with 'gf'
+set includeexpr=substitute(v:fname,'ci/','./','')
+set includeexpr=substitute(v:fname,'repo/','./','')
 
 " Remap the leader key
 let mapleader = ','
@@ -197,6 +204,9 @@ nnoremap <leader>gv :Gitv<cr>
 nnoremap <leader>gpr :Git pull --rebase<cr>
 nnoremap <leader>gps :Git push origin head<cr>
 
+" tap-cves mappings
+command! TapCveView read !tap-cves triage <C-r>"
+
 if has('nvim')
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 end
@@ -255,7 +265,6 @@ autocmd BufWritePost *.go silent! !ctags -R --languages=go --exclude=log --exclu
 
 " Shows Go function and variable info automatically when the cursor
 " is on top of one
-let g:go_auto_type_info = 1
 let g:go_auto_sameids = 1
 
 " Starts deoplete at startup
