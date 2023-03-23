@@ -5,6 +5,7 @@ call plug#begin('~/.vim/plugged')
 
 " Git Commands
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 
 " Quoting and parenthesizing made easy
 Plug 'tpope/vim-surround'
@@ -135,7 +136,7 @@ set cursorline
 
 " Make it easier to open filenames with 'gf'
 set includeexpr=substitute(v:fname,'ci/','./','')
-set includeexpr=substitute(v:fname,'repo/','./','')
+" set includeexpr=substitute(v:fname,'repo/','./','')
 
 " Remap the leader key
 let mapleader = ','
@@ -153,7 +154,9 @@ command! Strip execute '%s/\%x1b\[[0-9;]*m\|//g'
 nnoremap <F7> :TagbarToggle<CR>
 
 " Make YAML Great Again
-autocmd FileType yaml setlocal indentexpr=
+if has("autocmd")
+  autocmd FileType yaml setlocal indentexpr=
+endif
 
 " Markdown textwidth
 au BufRead,BufNewFile *.md setlocal textwidth=80
@@ -196,11 +199,10 @@ xmap ih <Plug>(GitGutterTextObjectInnerVisual)
 xmap ah <Plug>(GitGutterTextObjectOuterVisual)
 
 " Git plugin mappings
-nnoremap <leader>gs :Gstatus<cr>
-nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gg :Gbrowse<cr>
-nnoremap <leader>gl :Glog<cr>
-nnoremap <leader>gv :Gitv<cr>
+nnoremap <leader>gs :Git<cr>
+nnoremap <leader>gb :Git blame<cr>
+nnoremap <leader>gg :GBrowse<cr>
+nnoremap <leader>gl :Gclog<cr>
 nnoremap <leader>gpr :Git pull --rebase<cr>
 nnoremap <leader>gps :Git push origin head<cr>
 
@@ -224,7 +226,7 @@ noremap <c-k> <c-w>k<c-w>_
 set winminheight=0
 
 " Press <leader> v to open vimrc
-noremap <silent> <leader>v :vsplit ~/.vim/vimrc<CR>
+noremap <silent> <leader>v :tabedit $HOME/.vim/vimrc<CR>
 
 " reloads vimrc -- making all changes active
 noremap <silent> <Leader>V :source ~/.vim/vimrc<CR>:PlugInstall<CR>:exe ":echo 'vimrc reloaded'"<CR>
@@ -251,17 +253,20 @@ inoremap jj <ESC>
 set spelllang=en_ca
 
 " Compiler settings based on file types
-autocmd BufRead,BufNewFile *.rb compiler bundle_exec_rspec
-autocmd BufRead,BufNewFile *.rs compiler cargo
-autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit') " vim-go plugin
-autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit') " vim-go plugin
-autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split') " vim-go plugin
-autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe') " vim-go plugin
-autocmd Filetype go nnoremap <F3> :wa<CR>:GoDecls<CR>
-autocmd Filetype go nnoremap <F4> :wa<CR>:GoDeclsDir<CR>
-autocmd Filetype go nnoremap <F5> :wa<CR>:GoTest!<CR>
-autocmd Filetype go nnoremap <F6> :wa<CR>:GoTestFunc!<CR>
-autocmd BufWritePost *.go silent! !ctags -R --languages=go --exclude=log --exclude=tmp &
+if has("autocmd")
+  autocmd BufRead,BufNewFile *.rb compiler bundle_exec_rspec
+  autocmd BufRead,BufNewFile *.rs compiler cargo
+  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit') " vim-go plugin
+  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit') " vim-go plugin
+  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split') " vim-go plugin
+  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe') " vim-go plugin
+  autocmd Filetype go nnoremap <F3> :wa<CR>:GoDecls<CR>
+  autocmd Filetype go nnoremap <F4> :wa<CR>:GoDeclsDir<CR>
+  autocmd Filetype go nnoremap <F5> :wa<CR>:GoTest!<CR>
+  autocmd Filetype go nnoremap <F6> :wa<CR>:GoTestFunc!<CR>
+  autocmd BufWritePost *.go silent! !ctags -R --languages=go --exclude=log --exclude=tmp &
+  autocmd BufWritePost .vimrc source $HOME/.vim/vimrc<CR>
+endif
 
 " Shows Go function and variable info automatically when the cursor
 " is on top of one
