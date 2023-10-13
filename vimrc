@@ -1,5 +1,8 @@
 " This configuration applies to both vim and neovim.
 
+" TODO: Convert this file into a LUA script
+" TODO: Add the 'oil' file manager (https://github.com/stevearc/oil.nvim)
+
 " Plug for plugins
 call plug#begin('~/.vim/plugged')
 
@@ -43,14 +46,14 @@ Plug 'airblade/vim-gitgutter'
 " Git log viewer
 Plug 'rbong/vim-flog'
 
-" Start screen
-Plug 'mhinz/vim-startify'
-
 " colors
 Plug 'chriskempson/base16-vim'
 
 " run tests from within vim
 Plug 'janko-m/vim-test'
+
+" Easy substitution of text
+Plug 'svermeulen/vim-subversive'
 
 " Hooks up neovim supports to vim-dispatch
 if has('nvim')
@@ -75,9 +78,6 @@ Plug 'majutsushi/tagbar'
 " Match up plugin
 Plug 'andymass/vim-matchup'
 
-" Multiple cursors
-Plug 'terryma/vim-multiple-cursors'
-
 " Dev icons
 Plug 'ryanoasis/vim-devicons'
 
@@ -90,24 +90,26 @@ Plug 'cespare/vim-toml'
 " Rust plugin for vim
 Plug 'rust-lang/rust.vim'
 
-" Rego script plugin
-Plug 'tsandall/vim-rego'
-
 " Show vertical lines on indents (good for YAML)
 Plug 'Yggdroot/indentLine'
 
 " Modifies YAML folding rules
-Plug 'pedrohdz/vim-yaml-folds'
+" Plug 'pedrohdz/vim-yaml-folds'
 
 " Alternate YAML plugin. Fixes the syntax highlighting in embedded documents
 " in YAML files.
 Plug 'stephpy/vim-yaml'
+
+Plug 'Einenlum/yaml-revealer'
 
 " Golang programming
 Plug 'fatih/vim-go'
 
 " Makes splitting and joining lines of code easier
 Plug 'AndrewRadev/splitjoin.vim'
+
+" Terraform syntax and command
+Plug 'hashivim/vim-terraform'
 
 call plug#end()
 
@@ -161,8 +163,6 @@ endif
 " Markdown textwidth
 au BufRead,BufNewFile *.md setlocal textwidth=80
 au BufRead,BufNewFile *.markdown textwidth=80
-
-nmap <C-G> :cnext<CR>
 
 " FZF plugin mappings
 " FZF with the list of files managed by git
@@ -252,6 +252,8 @@ inoremap jj <ESC>
 " Spell language English (Canadian)
 set spelllang=en_ca
 
+let g:go_highlight_function_calls = 1
+
 " Compiler settings based on file types
 if has("autocmd")
   autocmd BufRead,BufNewFile *.rb compiler bundle_exec_rspec
@@ -264,13 +266,11 @@ if has("autocmd")
   autocmd Filetype go nnoremap <F4> :wa<CR>:GoDeclsDir<CR>
   autocmd Filetype go nnoremap <F5> :wa<CR>:GoTest!<CR>
   autocmd Filetype go nnoremap <F6> :wa<CR>:GoTestFunc!<CR>
+  autocmd Filetype go GoBuildTags mage
   autocmd BufWritePost *.go silent! !ctags -R --languages=go --exclude=log --exclude=tmp &
   autocmd BufWritePost .vimrc source $HOME/.vim/vimrc<CR>
 endif
 
-" Shows Go function and variable info automatically when the cursor
-" is on top of one
-let g:go_auto_sameids = 1
 
 " Starts deoplete at startup
 if has('nvim')
@@ -286,32 +286,10 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 
 " Search customization
 let g:rg_highlight="true"
-
-" Startify plugin settings
-if has('nvim')
-  let g:startify_custom_header = [
-        \ '     d8b   db d88888b  .d88b.  db    db d888888b .88b  d88. ',
-        \ '     888o  88 88      .8P  Y8. 88    88   `88    88 YbdP`88 ',
-        \ '     88V8o 88 88ooooo 88    88 Y8    8P    88    88  88  88 ',
-        \ '     88 V8o88 88~~~~~ 88    88 `8b  d8     88    88  88  88 ',
-        \ '     88  V888 88.     `8b  d8   `8bd8     .88.   88  88  88 ',
-        \ '     VP   V8P Y88888P  `Y88P      YP    Y888888P YP  YP  YP ',
-        \ ]
-else
-  let g:startify_custom_header = [
-        \ '     db    db d888888b .88b  d88. ',
-        \ '     88    88   `88    88 YbdP`88 ',
-        \ '     Y8    8P    88    88  88  88 ',
-        \ '     `8b  d8     88    88  88  88 ',
-        \ '      `8bd8     .88.   88  88  88 ',
-        \ '        YP    Y888888P YP  YP  YP ',
-        \ ]
-end
-
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
@@ -325,3 +303,14 @@ set nofoldenable
 
 " Disable indent line plugin for help and terminal files
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
+
+" s for substitute
+nmap s <plug>(SubversiveSubstitute)
+nmap ss <plug>(SubversiveSubstituteLine)
+nmap S <plug>(SubversiveSubstituteToEndOfLine)
+
+" matchup settings
+let g:matchup_matchparen_offscreen = { 'method': 'popup' }
+
+" search for a YAML key
+nnoremap <leader>y :call SearchYamlKey()<CR>
