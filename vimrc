@@ -93,9 +93,6 @@ Plug 'rust-lang/rust.vim'
 " Show vertical lines on indents (good for YAML)
 Plug 'Yggdroot/indentLine'
 
-" Modifies YAML folding rules
-" Plug 'pedrohdz/vim-yaml-folds'
-
 " Alternate YAML plugin. Fixes the syntax highlighting in embedded documents
 " in YAML files.
 Plug 'stephpy/vim-yaml'
@@ -298,8 +295,6 @@ nmap ga <Plug>(EasyAlign)
 
 " Mouse settings
 set mouse=nv
-
-set nofoldenable
 
 " Disable indent line plugin for help and terminal files
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
