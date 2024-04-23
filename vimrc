@@ -149,8 +149,10 @@ command! BufOnly execute '%bdelete|edit #|normal `"'
 " Strips escape sequences and ^M characters from file
 command! Strip execute '%s/\%x1b\[[0-9;]*m\|//g'
 
-" F7 to show the Tagbar window
-nnoremap <F7> :TagbarToggle<CR>
+" Ginkgo testing in vim
+let test#go#runner = 'ginkgo'
+let test#strategy = "dispatch"
+nnoremap <F7> :TestFile<CR>
 
 " Make YAML Great Again
 if has("autocmd")
@@ -263,7 +265,7 @@ if has("autocmd")
   autocmd Filetype go nnoremap <F4> :wa<CR>:GoDeclsDir<CR>
   autocmd Filetype go nnoremap <F5> :wa<CR>:GoTest!<CR>
   autocmd Filetype go nnoremap <F6> :wa<CR>:GoTestFunc!<CR>
-  autocmd Filetype go GoBuildTags mage
+  " autocmd Filetype go GoBuildTags mage
   autocmd BufWritePost *.go silent! !ctags -R --languages=go --exclude=log --exclude=tmp &
   autocmd BufWritePost .vimrc source $HOME/.vim/vimrc<CR>
 endif
